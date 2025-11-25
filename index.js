@@ -50,3 +50,7 @@ app.get('/products/:id', async (req, res) => {
         });
     }
 })
+
+app.listen(5000,"localhost", () => {
+    console.log('server is running');
+})
