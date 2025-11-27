@@ -132,6 +132,7 @@ app.get('/products/:id', async (req, res) => {
 // [POST] /categories/ create category
 // [PUT] / categories/:id update category
 // [DELETE]/categories/:id delete categories
+
 app.get('/categories', async (req, res) => {
     try {
         const result = await pool.query('select * from categories');
