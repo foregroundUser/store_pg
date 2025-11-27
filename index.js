@@ -10,6 +10,7 @@ pool.connect().then(() => {
 app.use(express.json());
 
 //Products API
+
 app.post('/products', async (req, res) => {
     try {
         const {title, price, description, image, categoryId} = req.body
