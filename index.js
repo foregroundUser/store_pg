@@ -152,7 +152,7 @@ app.get('/categories/:id', async (req, res) => {
         const {id} = req.params;
         const result = await pool.query('select * from categories where id=$1', [id]);
         if (result.rows.length === 1) {
-            res.status(200).json(result.rows)
+            res.status(200).json(result.rows[0])
         } else {
             res.status(404).json({
                 status: false, message: "Id not found"
@@ -178,6 +178,7 @@ app.post('/categories', async (req, res) => {
         console.log(error.message);
     }
 });
+
 app.delete('/categories/:id', async (req, res) => {
     try {
         const {id} = req.params;
@@ -213,6 +214,7 @@ app.put('/categories/:id', async (req, res) => {
         console.log(e.message)
     }
 });
+
 app.listen(5000, () => {
     console.log('server is running ');
 })
