@@ -1,24 +1,6 @@
 const pool = require("../db");
-exports.getAllProducts = async (req, res) => {
-    try {
-        const result = await pool.query('select * from products');
-        const isHave = result.rows.length > 0;
-        if (isHave) {
-            res.status(200).json({
-                success: true, data: result.rows
-            });
-        } else {
-            res.status(200).json({
-                success: false, message: 'no data found'
-            });
-        }
-
-    } catch (error) {
-        res.status(200).json({
-            success: false, message: error.message
-        });
-    }
-}
+const {getAllElements} = require("./commonController");
+exports.getAllProducts = getAllElements('products')
 exports.addProduct = async (req, res) => {
     try {
         const {title, price, description, image, categoryId} = req.body
@@ -109,5 +91,3 @@ exports.getProductById = async (req, res) => {
         });
     }
 }
-
-// const result = await pool.query('select * from products where id=$1', [id]);

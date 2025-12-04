@@ -1,18 +1,6 @@
 const pool = require("../db");
-exports.getCategories = async (req, res) => {
-    try {
-        const result = await pool.query('select * from categories');
-        if (!result.rows) {
-            res.status(404).json({
-                status: false, message: "Categories empty"
-            });
-        } else {
-            res.status(200).json(result.rows);
-        }
-    } catch (error) {
-        console.log(error.message);
-    }
-}
+const {getAllProducts} = require("./productController");
+exports.getCategories = getAllProducts('categories');
 
 exports.getCategoryById = async (req, res) => {
     try {

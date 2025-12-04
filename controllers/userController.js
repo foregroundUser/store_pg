@@ -1,24 +1,6 @@
 const pool = require("../db");
-exports.getAllUsers = async (req, res) => {
-    try {
-        const result = await pool.query('select * from users');
-        const isHave = result.rows.length > 0;
-        if (isHave) {
-            res.status(200).json({
-                success: true, data: result.rows
-            });
-        } else {
-            res.status(200).json({
-                success: false, message: 'no data found'
-            });
-        }
-
-    } catch (error) {
-        res.status(200).json({
-            success: false, message: error.message
-        });
-    }
-}
+const {getAllElements} = require("./commonController");
+exports.getAllUsers = getAllElements('users')
 exports.addUser = async (req, res) => {
     try {
         const {name, email, password, avatar, role} = req.body;
@@ -45,7 +27,6 @@ exports.deleteUser = async (req, res) => {
         });
     }
 }
-
 exports.updateUser = async (req, res) => {
     const {id} = req.params;
     const {name, email, password, avatar} = req.body;
