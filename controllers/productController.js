@@ -109,3 +109,5 @@ exports.getProductById = async (req, res) => {
         });
     }
 }
+
+// const result = await pool.query('select * from products where id=$1', [id]);
