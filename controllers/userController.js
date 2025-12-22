@@ -1,10 +1,12 @@
 const pool = require("../db");
 const {getAllElements} = require("./commonController");
+const bcrypt = require("bcrypt");
 exports.getAllUsers = getAllElements('users')
 exports.addUser = async (req, res) => {
     try {
         const {name, email, password, avatar, role} = req.body;
-        const result = await pool.query('insert into users(name, email, password,avatar,role) values ($1, $2, $3,$4,$5) returning *', [name, email, password, avatar, role]);
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const result = await pool.query('insert into users(name, email, password,avatar,role) values ($1, $2, $3,$4,$5) returning *', [name, email, hashedPassword, avatar, role]);
         res.status(200).json(result.rows);
     } catch (error) {
         res.status(500).json({
