@@ -1,6 +1,6 @@
 const pool = require("../db");
-const {getAllProducts} = require("./productController");
-exports.getCategories = getAllProducts('categories');
+const {getAllElements} = require("./commonController");
+exports.getCategories = getAllElements('categories');
 
 exports.getCategoryById = async (req, res) => {
     try {
