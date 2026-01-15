@@ -1,6 +1,7 @@
 const pool = require("../db");
 const {getAllElements} = require("./commonController");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 exports.getAllUsers = getAllElements('users')
 exports.registerUser = async (req, res) => {
     try {
@@ -14,9 +15,10 @@ exports.registerUser = async (req, res) => {
 
         }
         const result = await pool.query('insert into users(name, email, password,avatar,role) values ($1, $2, $3,$4,$5) returning *', [name, email, hashedPassword, avatar, role]);
+        const token = jwt.sign({id: result.id, role: result.role}, "ketmonchi")
+        console.log(token)
         res.status(200).json(result.rows);
-    } catch
-        (error) {
+    } catch (error) {
         res.status(500).json({
             success: false, message: error.message
         })
@@ -29,12 +31,13 @@ function checkEmailExists(email) {
         .then(result => result.rows.length > 0);
 }
 
+
 exports.loginUser = async (req, res) => {
     try {
         const {email, password} = req.body;
         const result = await pool.query('select * from users where email=$1', [email]);
         if (result.rows.length === 1) {
-            const user = result.rows[0];    // get the user object
+            const user = result.rows[0];
             const isPasswordValid = await bcrypt.compare(password, user.password);
             if (isPasswordValid) {
                 res.status(200).json({
