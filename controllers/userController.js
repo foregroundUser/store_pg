@@ -3,6 +3,15 @@ const {getAllElements} = require("./commonController");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 exports.getAllUsers = getAllElements('users')
+exports.getUserById = async (req, res) => {
+    try {
+        const id = req.params.id
+        const result = await pool.query('select * from users where id=$1', [id])
+        return res.json(result.rows)
+    } catch (e) {
+        return res.json({message: e.message})
+    }
+}
 exports.registerUser = async (req, res) => {
     try {
         const {name, email, password, avatar, role} = req.body;

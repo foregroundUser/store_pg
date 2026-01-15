@@ -3,10 +3,10 @@ const {
     getCategories, getCategoryById, addCategory, deleteCategory, updateCategory
 } = require("../controllers/categoryController");
 const {authentication} = require("../middlewares/authentication");
+const {roleCheck} = require("../middlewares/rolecheck.middleware");
 const categoryRouter = express.Router();
-
-// Authenticaion
 categoryRouter.use(authentication)
+categoryRouter.use(roleCheck('admin','customer'))
 
 
 //End-Points

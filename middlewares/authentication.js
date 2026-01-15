@@ -1,8 +1,22 @@
-const express = require("express");
-const app = express();
-const jwt = require("jsonwebtoken")
-exports.authentication = app.use((req, res, next) => {
-    const token = req.headers.authorization.split(' ')[1];
-    if (!token) return res.status(400).json({message: "Token kiritilmadi !"})
-    console.log(jwt.verify(token, "ketmonchi"))
-})
+const jwt = require("jsonwebtoken");
+
+exports.authentication = (req, res, next) => {
+    try {
+        const authHeader = req.headers.authorization;
+
+        if (!authHeader) {
+            return res.status(401).json({ message: "Authorization header yo'q!" });
+        }
+
+        const [type, token] = authHeader.split(" ");
+
+        if (type !== "Bearer" || !token) {
+            return res.status(401).json({ message: "Token formati noto'g'ri. Bearer <token> bo'lishi kerak." });
+        }
+        console.log(jwt.verify(token, "ketmonchi"));
+        req.user = jwt.verify(token, "ketmonchi");
+        return next();
+    } catch (err) {
+        return res.status(401).json({ message: "Token noto'g'ri yoki eskirgan!", error: err.message });
+    }
+};
